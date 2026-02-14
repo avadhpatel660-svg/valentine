@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Shivani 💖</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins',sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg,#ffd6e8,#ff4f81);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h1 {
+            font-family: 'Dancing Script',cursive;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            transition: .3s;
+        }
+
+        .primary {
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg,#ff1744,#ff5252);
+            color: white;
+            box-shadow: 0 0 15px rgba(255,0,0,.6);
+        }
+
+            .primary:hover {
+                transform: scale(1.1);
+                box-shadow: 0 0 30px red;
+            }
+
+        .secondary {
+            padding: 10px 25px;
+            border-radius: 50px;
+            background: white;
+            color: #ff1744;
+            border: 2px solid #ff1744;
+        }
+
+        .bear {
+            font-size: 4rem;
+            animation: bounce 1.5s infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes bounce {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 40px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-110vh);
+                opacity: 0;
+            }
+        }
+
+        .countdown {
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        .celebration {
+            background: linear-gradient(135deg,#ff4f81,#ff1744);
+            z-index: 20;
+        }
+
+        .pulse {
+            font-size: 4rem;
+            animation: pulse 1s infinite;
+            font-family: 'Dancing Script',cursive;
+        }
+
+        @keyframes pulse {
+            0%,100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .spin {
+            font-size: 4rem;
+            margin: 20px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            top: 50%;
+            left: 50%;
+            opacity: 0;
+        }
+
+        .fadeIn {
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8a0b41e6f.mp3?filename=romantic-love-ambient-110634.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Intro Screen -->
+    <div class="screen" id="intro">
+        <h1 class="fadeIn">Shivani… 💕</h1>
+        <p class="subtitle fadeIn">From the first smile to every laugh we shared...</p>
+        <p class="subtitle fadeIn">You became my favourite chapter.</p>
+        <button class="primary" onclick="startStory()">Continue 💖</button>
+    </div>
+
+    <!-- Proposal Screen -->
+    <div class="screen hidden" id="proposal">
+        <div class="bear">🧸</div>
+        <h1>Will You Be My Valentine, Shivani?</h1>
+        <div class="subtitle">"I've been gathering courage to ask you this..."</div>
+        <div>Every love story is beautiful, but ours is my favourite 💞</div>
+        <div class="countdown" id="timer"></div>
+        <div class="buttons">
+            <button id="yesBtn" class="primary">Yes ❤️</button>
+            <button id="noBtn" class="secondary">No</button>
+        </div>
+    </div>
+
+    <!-- Celebration Screen -->
+    <div class="screen hidden celebration" id="celebration">
+        <div class="pulse">Yayyyy!! 💖</div>
+        <div class="spin">💍</div>
+        <p style="font-size:1.3rem;">I knew you'd say yes, Shivani… 🥰</p>
+    </div>
+
+    <script>
+const intro=document.getElementById("intro");
+const proposal=document.getElementById("proposal");
+const celebration=document.getElementById("celebration");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const music=document.getElementById("bgMusic");
+
+let hearts=[];
+let yesScale=1;
+let msgIndex=0;
+
+const messages=[
+"Nope, not an option!",
+"Try again!",
+"You sure about that?",
+"Not happening!",
+"Think again!"
+];
+
+function startStory(){
+intro.classList.add("hidden");
+proposal.classList.remove("hidden");
+music.play().catch(()=>{});
+createHearts();
+startTimer();
+}
+
+function createHearts(){
+for(let i=0;i<15;i++){
+const h=document.createElement("div");
+h.className="heart";
+h.innerText="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(Math.random()*20+15)+"px";
+h.style.animationDuration=(Math.random()*5+5)+"s";
+document.body.appendChild(h);
+hearts.push(h);
+}
+}
+
+function moveNo(){
+const yesRect=yesBtn.getBoundingClientRect();
+const w=noBtn.offsetWidth;
+const h=noBtn.offsetHeight;
+let x,y;
+do{
+x=Math.random()*(window.innerWidth-w);
+y=Math.random()*(window.innerHeight-h);
+}while(
+x<yesRect.right &&
+x+w>yesRect.left &&
+y<yesRect.bottom &&
+y+h>yesRect.top
+);
+noBtn.style.position="fixed";
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+noBtn.innerText=messages[msgIndex];
+msgIndex=(msgIndex+1)%messages.length;
+
+yesScale+=0.1;
+yesBtn.style.transform=`scale(${yesScale})`;
+}
+
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("touchstart",moveNo);
+noBtn.addEventListener("click",moveNo);
+
+yesBtn.addEventListener("click",()=>{
+proposal.classList.add("hidden");
+hearts.forEach(h=>h.remove());
+celebration.classList.remove("hidden");
+launchConfetti();
+});
+
+function launchConfetti(){
+for(let i=0;i<120;i++){
+const c=document.createElement("div");
+c.className="confetti";
+c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+document.body.appendChild(c);
+const angle=Math.random()*2*Math.PI;
+const dist=Math.random()*500+200;
+c.animate([
+{transform:"translate(0,0)",opacity:1},
+{transform:`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`,opacity:0}
+],{duration:1500,easing:"ease-out"});
+setTimeout(()=>c.remove(),1500);
+}
+}
+
+function startTimer(){
+const startDate=new Date("2024-11-04");
+setInterval(()=>{
+const now=new Date();
+const diff=now-startDate;
+const days=Math.floor(diff/(1000*60*60*24));
+document.getElementById("timer").innerText=
+"We've been creating memories for "+days+" days 💕";
+},1000);
+}
+    </script>
+
+</body>
+</html>
